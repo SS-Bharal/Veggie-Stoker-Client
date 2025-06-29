@@ -88,29 +88,43 @@ const CategoryPage = () => {
             )
         }
 
-        <div className='p-4 grid  grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2'>
+        <div className='p-4 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4'>
             {
                 categoryData.map((category,index)=>{
                     return(
-                        <div className='w-32 h-56 rounded shadow-md' key={category._id}>
-                            <img 
-                                alt={category.name}
-                                src={category.image}
-                                className='w-full object-scale-down'
-                            />
-                            <div className='items-center h-9 flex gap-2'>
-                                <button onClick={()=>{
-                                    setOpenEdit(true)
-                                    setEditData(category)
-                                }} className='flex-1 bg-green-100 hover:bg-green-200 text-green-600 font-medium py-1 rounded'>
-                                    Edit
-                                </button>
-                                <button onClick={()=>{
-                                    setOpenConfirmBoxDelete(true)
-                                    setDeleteCategory(category)
-                                }} className='flex-1 bg-red-100 hover:bg-red-200 text-red-600 font-medium py-1 rounded'>
-                                    Delete
-                                </button>
+                        <div className='group bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 overflow-hidden' key={category._id}>
+                            <div className='relative overflow-hidden'>
+                                <img 
+                                    alt={category.name}
+                                    src={category.image}
+                                    className='w-full h-40 object-cover transition-transform duration-300 group-hover:scale-110'
+                                />
+                                <div className='absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300'></div>
+                            </div>
+                            <div className='p-3'>
+                                <h3 className='font-semibold text-gray-800 text-sm truncate mb-3 text-center' title={category.name}>
+                                    {category.name}
+                                </h3>
+                                <div className='flex gap-2'>
+                                    <button 
+                                        onClick={()=>{
+                                            setOpenEdit(true)
+                                            setEditData(category)
+                                        }} 
+                                        className='flex-1 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-medium py-2 px-3 rounded-md text-xs transition-all duration-200 transform hover:scale-105 shadow-sm'
+                                    >
+                                        Edit
+                                    </button>
+                                    <button 
+                                        onClick={()=>{
+                                            setOpenConfirmBoxDelete(true)
+                                            setDeleteCategory(category)
+                                        }} 
+                                        className='flex-1 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-medium py-2 px-3 rounded-md text-xs transition-all duration-200 transform hover:scale-105 shadow-sm'
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     )
