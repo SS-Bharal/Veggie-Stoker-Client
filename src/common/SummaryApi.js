@@ -152,6 +152,10 @@ const SummaryApi = {
     getOrderItems : {
         url : '/api/order/order-list',
         method : 'get'
+    },
+    verify_email_otp: {
+        url: '/api/user/verify-email-otp',
+        method: 'post'
     }
 }
 

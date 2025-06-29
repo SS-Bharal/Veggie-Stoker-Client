@@ -5,7 +5,7 @@ import SearchPage from "../pages/SearchPage";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import ForgotPassword from "../pages/ForgotPassword";
-import OtpVerification from "../pages/OtpVerification";
+import VerifyEmailOtp from "../pages/VerifyEmailOtp";
 import ResetPassword from "../pages/ResetPassword";
 import UserMenuMobile from "../pages/UserMenuMobile";
 import Dashboard from "../layouts/Dashboard";
@@ -50,8 +50,8 @@ const router = createBrowserRouter([
                 element : <ForgotPassword/>
             },
             {
-                path : "verification-otp",
-                element : <OtpVerification/>
+                path : "email-otp-verification",
+                element : <VerifyEmailOtp/>
             },
             {
                 path : "reset-password",

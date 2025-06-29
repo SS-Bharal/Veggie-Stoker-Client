@@ -42,11 +42,13 @@ const Login = () => {
                 data : data
             })
             
-            if(response.data.error){
-                toast.error(response.data.message)
+            if(response.data.success && response.data.needEmailVerification){
+                // Check for email verification error
+                if(response.data.needEmailVerification && data.email){
+                    navigate("/email-otp-verification", { state: { email: data.email } })
+                }
             }
-
-            if(response.data.success){
+            else if (response.data.success){
                 toast.success(response.data.message)
                 localStorage.setItem('accesstoken',response.data.data.accesstoken)
                 localStorage.setItem('refreshToken',response.data.data.refreshToken)

@@ -61,7 +61,7 @@ const Register = () => {
                     password : "",
                     confirmPassword : ""
                 })
-                navigate("/login")
+                navigate("/email-otp-verification", { state: { email: data.email } })
             }
 
         } catch (error) {
