@@ -8,9 +8,11 @@ import EditCategory from '../components/EditCategory'
 import CofirmBox from '../components/CofirmBox'
 import toast from 'react-hot-toast'
 import AxiosToastError from '../utils/AxiosToastError'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { setAllCategory } from '../store/productSlice'
 
 const CategoryPage = () => {
+    const dispatch = useDispatch()
     const [openUploadCategory,setOpenUploadCategory] = useState(false)
     const [loading,setLoading] = useState(false)
     const [categoryData,setCategoryData] = useState([])
@@ -40,6 +42,8 @@ const CategoryPage = () => {
 
             if(responseData.success){
                 setCategoryData(responseData.data)
+                // Update Redux store with sorted categories
+                dispatch(setAllCategory(responseData.data.sort((a, b) => a.name.localeCompare(b.name))))
             }
         } catch (error) {
             
@@ -65,6 +69,7 @@ const CategoryPage = () => {
                 toast.success(responseData.message)
                 fetchCategory()
                 setOpenConfirmBoxDelete(false)
+                // Redux store will be updated by fetchCategory() which now dispatches setAllCategory
             }
         } catch (error) {
             AxiosToastError(error)

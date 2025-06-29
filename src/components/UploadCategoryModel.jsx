@@ -5,8 +5,11 @@ import Axios from '../utils/Axios';
 import SummaryApi from '../common/SummaryApi';
 import toast from 'react-hot-toast'
 import AxiosToastError from '../utils/AxiosToastError';
+import { useDispatch } from 'react-redux';
+import { setAllCategory } from '../store/productSlice';
 
 const UploadCategoryModel = ({close, fetchData}) => {
+    const dispatch = useDispatch()
     const [data,setData] = useState({
         name : "",
         image : ""

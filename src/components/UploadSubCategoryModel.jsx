@@ -1,14 +1,16 @@
 import React, { useState } from 'react'
 import { IoClose } from "react-icons/io5";
 import uploadImage from '../utils/UploadImage';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Axios from '../utils/Axios';
 import SummaryApi from '../common/SummaryApi';
 import toast from 'react-hot-toast';
 import AxiosToastError from '../utils/AxiosToastError';
 import { useEffect } from 'react';
+import { setAllSubCategory } from '../store/productSlice';
 
 const UploadSubCategoryModel = ({close, fetchData}) => {
+    const dispatch = useDispatch()
     const [subCategoryData,setSubCategoryData] = useState({
         name : "",
         image : "",

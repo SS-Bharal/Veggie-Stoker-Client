@@ -5,8 +5,11 @@ import Axios from '../utils/Axios';
 import SummaryApi from '../common/SummaryApi';
 import toast from 'react-hot-toast'
 import AxiosToastError from '../utils/AxiosToastError';
+import { useDispatch } from 'react-redux';
+import { setAllCategory } from '../store/productSlice';
 
 const EditCategory = ({close, fetchData,data : CategoryData}) => {
+    const dispatch = useDispatch()
     const [data,setData] = useState({
         _id : CategoryData._id,
         name : CategoryData.name,
