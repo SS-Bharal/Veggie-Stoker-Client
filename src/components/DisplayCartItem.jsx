@@ -76,6 +76,9 @@ const DisplayCartItem = ({close}) => {
                                                                     {DisplayPriceInRupees(item?.productId?.price)}
                                                                 </p>
                                                             )}
+                                                            <p className='text-xs text-gray-500 mt-1'>
+                                                                Stock: {item?.productId?.stock} available
+                                                            </p>
                                                         </div>
                                                         <div>
                                                             <AddToCartButton data={item?.productId}/>

@@ -20,6 +20,12 @@ const AddToCartButton = ({ data }) => {
         e.preventDefault()
         e.stopPropagation()
 
+        // Check if product is in stock
+        if (data.stock <= 0) {
+            toast.error("Product is out of stock")
+            return
+        }
+
         try {
             setLoading(true)
 
@@ -60,6 +66,12 @@ const AddToCartButton = ({ data }) => {
     const increaseQty = async(e) => {
         e.preventDefault()
         e.stopPropagation()
+        
+        // Check if trying to add more than available stock
+        if (qty >= data.stock) {
+            toast.error(`Only ${data.stock} items available in stock`)
+            return
+        }
     
        const response = await  updateCartItem(cartItemDetails?._id,qty+1)
         
@@ -90,7 +102,17 @@ const AddToCartButton = ({ data }) => {
 
                         <p className='flex-1 w-full font-semibold px-1 flex items-center justify-center'>{qty}</p>
 
-                        <button onClick={increaseQty} className='bg-green-600 hover:bg-green-700 text-white flex-1 w-full p-1 rounded flex items-center justify-center'><FaPlus /></button>
+                        <button 
+                            onClick={increaseQty} 
+                            disabled={qty >= data.stock}
+                            className={`flex-1 w-full p-1 rounded flex items-center justify-center ${
+                                qty >= data.stock 
+                                    ? 'bg-gray-400 cursor-not-allowed text-gray-600' 
+                                    : 'bg-green-600 hover:bg-green-700 text-white'
+                            }`}
+                        >
+                            <FaPlus />
+                        </button>
                     </div>
                 ) : (
                     <button onClick={handleADDTocart} className='bg-green-600 hover:bg-green-700 text-white px-2 lg:px-4 py-1 rounded'>
