@@ -7,6 +7,8 @@ import toast from 'react-hot-toast'
 import AxiosToastError from '../utils/AxiosToastError';
 import { useDispatch } from 'react-redux';
 import { setAllCategory } from '../store/productSlice';
+import Loading from './Loading';
+import imageCompression from 'browser-image-compression';
 
 const UploadCategoryModel = ({close, fetchData}) => {
     const dispatch = useDispatch()
@@ -15,6 +17,7 @@ const UploadCategoryModel = ({close, fetchData}) => {
         image : ""
     })
     const [loading,setLoading] = useState(false)
+    const [imageLoading, setImageLoading] = useState(false)
 
     const handleOnChange = (e)=>{
         const { name, value} = e.target
@@ -57,16 +60,32 @@ const UploadCategoryModel = ({close, fetchData}) => {
         if(!file){
             return
         }
-
-        const response = await uploadImage(file)
-        const { data : ImageResponse } = response
-
-        setData((preve)=>{
-            return{
-                ...preve,
-                image : ImageResponse.data.url
-            }
-        })
+        // Cap at 2MB
+        if (file.size > 2 * 1024 * 1024) {
+            toast.error('Image is too large! Please upload an image under 2MB.')
+            return
+        }
+        setImageLoading(true)
+        try {
+            // Compress and resize image
+            const options = {
+                maxSizeMB: 0.5, // Target max size 500KB
+                maxWidthOrHeight: 800, // Max width or height
+                useWebWorker: true
+            };
+            const compressedFile = await imageCompression(file, options);
+            const response = await uploadImage(compressedFile);
+            const { data : ImageResponse } = response;
+            setData((preve)=>{
+                return{
+                    ...preve,
+                    image : ImageResponse.data.url
+                }
+            })
+        } catch (err) {
+            toast.error('Image compression/upload failed!');
+        }
+        setImageLoading(false);
     }
   return (
     <section className='fixed top-0 bottom-0 left-0 right-0 p-4 bg-neutral-800 bg-opacity-60 flex items-center justify-center'>
@@ -95,7 +114,9 @@ const UploadCategoryModel = ({close, fetchData}) => {
                     <div className='flex gap-4 flex-col lg:flex-row items-center'>
                         <div className='border bg-blue-50 h-36 w-full lg:w-36 flex items-center justify-center rounded'>
                             {
-                                data.image ? (
+                                imageLoading ? (
+                                    <Loading />
+                                ) : data.image ? (
                                     <img
                                         alt='category'
                                         src={data.image}

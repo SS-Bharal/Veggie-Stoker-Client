@@ -12,6 +12,8 @@ import SummaryApi from '../common/SummaryApi';
 import AxiosToastError from '../utils/AxiosToastError';
 import successAlert from '../utils/SuccessAlert';
 import { useEffect } from 'react';
+import imageCompression from 'browser-image-compression';
+import { toast } from 'react-hot-toast';
 
 const UploadProduct = () => {
   const [data,setData] = useState({
@@ -54,19 +56,33 @@ const UploadProduct = () => {
     if(!file){
       return 
     }
+    // Cap at 2MB
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error('Image is too large! Please upload an image under 2MB.')
+      return
+    }
     setImageLoading(true)
-    const response = await uploadImage(file)
-    const { data : ImageResponse } = response
-    const imageUrl = ImageResponse.data.url 
-
-    setData((preve)=>{
-      return{
-        ...preve,
-        image : [...preve.image,imageUrl]
-      }
-    })
+    try {
+      // Compress and resize image
+      const options = {
+        maxSizeMB: 0.5, // Target max size 500KB
+        maxWidthOrHeight: 800, // Max width or height
+        useWebWorker: true
+      };
+      const compressedFile = await imageCompression(file, options);
+      const response = await uploadImage(compressedFile)
+      const { data : ImageResponse } = response
+      const imageUrl = ImageResponse.data.url 
+      setData((preve)=>{
+        return{
+          ...preve,
+          image : [...preve.image,imageUrl],
+        }
+      })
+    } catch (err) {
+      toast.error('Image compression/upload failed!');
+    }
     setImageLoading(false)
-
   }
 
   const handleDeleteImage = async(index)=>{

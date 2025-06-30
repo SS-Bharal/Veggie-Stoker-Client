@@ -45,31 +45,38 @@ const Home = () => {
           </div>
       </div>
       
-      <div className='container mx-auto px-4 my-2 grid grid-cols-5 md:grid-cols-8 lg:grid-cols-10  gap-2'>
+      <div className='container mx-auto px-4 my-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-6'>
           {
             loadingCategory ? (
               new Array(12).fill(null).map((c,index)=>{
                 return(
-                  <div key={index+"loadingcategory"} className='bg-white rounded p-4 min-h-36 grid gap-2 shadow animate-pulse'>
-                    <div className='bg-blue-100 min-h-24 rounded'></div>
-                    <div className='bg-blue-100 h-8 rounded'></div>
+                  <div key={index+"loadingcategory"} className='bg-white rounded-xl p-4 min-h-36 grid gap-2 shadow animate-pulse'>
+                    <div className='bg-blue-100 min-h-24 rounded-xl'></div>
+                    <div className='bg-blue-100 h-8 rounded-xl'></div>
                   </div>
                 )
               })
             ) : (
               categoryData.map((cat,index)=>{
                 return(
-                  <div key={cat._id+"displayCategory"} className='w-full h-full' onClick={()=>handleRedirectProductListpage(cat._id,cat.name)}>
-                    <div>
+                  <div
+                    key={cat._id+"displayCategory"}
+                    className='w-full h-full cursor-pointer group transition-all duration-300'
+                    onClick={()=>handleRedirectProductListpage(cat._id,cat.name)}
+                  >
+                    <div className='bg-gradient-to-t from-green-100 to-white rounded-xl shadow-md group-hover:shadow-xl p-4 flex flex-col items-center transition-all duration-300 group-hover:-translate-y-1'>
                         <img 
                           src={cat.image}
-                          className='w-full h-full object-scale-down'
+                          className='w-20 h-20 object-contain mb-3 drop-shadow-md transition-transform duration-300 group-hover:scale-110'
+                          alt={cat.name}
                         />
+                        <div className='w-full text-center'>
+                          <span className='block font-semibold text-gray-800 text-sm truncate' title={cat.name}>{cat.name}</span>
+                        </div>
                     </div>
                   </div>
                 )
               })
-              
             )
           }
       </div>

@@ -8,6 +8,8 @@ import toast from 'react-hot-toast';
 import AxiosToastError from '../utils/AxiosToastError';
 import { useEffect } from 'react';
 import { setAllSubCategory } from '../store/productSlice';
+import imageCompression from 'browser-image-compression';
+import Loading from '../components/Loading';
 
 const UploadSubCategoryModel = ({close, fetchData}) => {
     const dispatch = useDispatch()
@@ -17,6 +19,7 @@ const UploadSubCategoryModel = ({close, fetchData}) => {
         category : []
     })
     const allCategory = useSelector(state => state.product.allCategory)
+    const [imageLoading, setImageLoading] = useState(false)
 
     const handleChange = (e)=>{
         const { name, value} = e.target 
@@ -35,16 +38,32 @@ const UploadSubCategoryModel = ({close, fetchData}) => {
         if(!file){
             return
         }
-
-        const response = await uploadImage(file)
-        const { data : ImageResponse } = response
-
-        setSubCategoryData((preve)=>{
-            return{
-                ...preve,
-                image : ImageResponse.data.url
-            }
-        })
+        // Cap at 2MB
+        if (file.size > 2 * 1024 * 1024) {
+            toast.error('Image is too large! Please upload an image under 2MB.')
+            return
+        }
+        setImageLoading(true)
+        try {
+            // Compress and resize image
+            const options = {
+                maxSizeMB: 0.5, // Target max size 500KB
+                maxWidthOrHeight: 800, // Max width or height
+                useWebWorker: true
+            };
+            const compressedFile = await imageCompression(file, options);
+            const response = await uploadImage(compressedFile);
+            const { data : ImageResponse } = response;
+            setSubCategoryData((preve)=>{
+                return{
+                    ...preve,
+                    image : ImageResponse.data.url
+                }
+            })
+        } catch (err) {
+            toast.error('Image compression/upload failed!');
+        }
+        setImageLoading(false);
     }
 
     const handleRemoveCategorySelected = (categoryId)=>{
@@ -109,7 +128,9 @@ const UploadSubCategoryModel = ({close, fetchData}) => {
                         <div className='flex flex-col lg:flex-row items-center gap-3'>
                             <div className='border h-36 w-full lg:w-36 bg-blue-50 flex items-center justify-center'>
                                 {
-                                    !subCategoryData.image ? (
+                                    imageLoading ? (
+                                        <Loading />
+                                    ) : !subCategoryData.image ? (
                                         <p className='text-sm text-neutral-400'>No Image</p>
                                     ) : (
                                         <img
