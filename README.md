@@ -2,6 +2,9 @@
 
 **Veggie Stoker** is your trusted partner for fresh, quality vegetables and groceries. Built using the **MERN stack (MongoDB, Express.js, React.js, Node.js)**, this full-stack platform brings farm-fresh produce directly to your doorstep with real-time inventory tracking, customer order management, and efficient delivery.
 
+## 🚀 Live Project
+👉 [https://www.veggiestoker.com/](https://www.veggiestoker.com/)
+
 ## 🎥 Project Demo Video
 
 [![Watch the demo](thumbnail-VeggieStoker.png)](https://drive.google.com/file/d/1JuszsMpsbXHNv7g-eCjMTrJFpTrt5623/view?usp=sharing)
